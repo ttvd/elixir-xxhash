@@ -20,34 +20,37 @@ defmodule XXHash do
   defmacrop mask64(x), do: quote do: unquote(x) &&& 0xFFFFFFFFFFFFFFFF
 
   # Hash 32 bit integers.
-  @spec xxh32(binary | term, non_neg_integer) :: non_neg_integer
+  @spec xxh32(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
   def xxh32(<<>>, length, seed), do: 0
   def xxh32(input, length, seed) do
+    # if >= than 16 block
   end
 
   # Hash 64 bit integers.
-  @spec xxh64(binary | term, non_neg_integer) :: non_neg_integer
+  @spec xxh64(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
   def xxh64(<<>>, length, seed), do: 0
   def xxh64(input, length, seed) do
   end
 
   # Detect endianess.
-  @spec endianness() :: atom
+  #@spec endianness() :: atom
   defp endianness() when <<1::32-little>> == <<1::32-native>>, do: :endianness_little
   defp endianness(), do: :endianness_big
 
   # Swap bytes of 32 bit integer.
-  @spec byteswap32(integer) :: integer
-  defp byteswap32(value) when is_integer(value), do: <<y::32-big>>=<<value::32-little>>; y
+  #@spec byteswap32(integer) :: integer
+  defp byteswap32(value) do <<y::32-big>> = <<value::32-little>>; y end
 
   # Swap bytes of 64 bit integer.
-  @spec byteswap64(integer) :: integer
-  defp byteswap64(value) when is_integer(value), do: <<y::64-big>>=<<value::64-little>>; y
+  #@spec byteswap64(integer) :: integer
+  defp byteswap64(value) do <<y::64-big>> = <<value::64-little>>; y end
 
   # Perform rotation left for 32 bit integer.
+  #@spec rotl32(integer, non_neg_integer) :: integer
   defp rotl32(value, shift), do: ((value <<< shift) ||| (value >>> (32 - shift)))
 
   # Perform rotation left for 64 bit integer.
+  #@spec rotl64(integer, non_neg_integer) :: integer
   defp rotl64(value, shift), do: ((value <<< shift) ||| (value >>> (64 - shift)))
 
   # Read 32 bit integer.
