@@ -1,0 +1,2 @@
+defmodule XXHash do
+end
