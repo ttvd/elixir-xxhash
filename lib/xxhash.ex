@@ -16,8 +16,8 @@ defmodule XXHash do
   @prime64_5 2870177450012600261
 
   # Make sure integers are 32 or 64 bit long.
-  defmacrop mask_32(x), do: quote do: unquote(x) &&& 0xFFFFFFFF
-  defmacrop mask_64(x), do: quote do: unquote(x) &&& 0xFFFFFFFFFFFFFFFF
+  defmacrop mask32(x), do: quote do: unquote(x) &&& 0xFFFFFFFF
+  defmacrop mask64(x), do: quote do: unquote(x) &&& 0xFFFFFFFFFFFFFFFF
 
   # Hash 32 bit integers.
   @spec xxh32(binary | term, non_neg_integer) :: non_neg_integer
@@ -44,7 +44,11 @@ defmodule XXHash do
   @spec byteswap64(integer) :: integer
   defp byteswap64(value) when is_integer(value), do: <<y::64-big>>=<<value::64-little>>; y
 
-  # 
+  # Perform rotation left for 32 bit integer.
+  defp rotl32(value, shift), do: ((value <<< shift) ||| (value >>> (32 - shift)))
+
+  # Perform rotation left for 64 bit integer.
+  defp rotl64(value, shift), do: ((value <<< shift) ||| (value >>> (64 - shift)))
 
   # Read 32 bit integer.
   #defp read32(<<>>, :endianness_little), do:
