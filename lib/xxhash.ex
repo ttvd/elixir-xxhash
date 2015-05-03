@@ -113,6 +113,3 @@ defmodule XXHash do
     {Int32.rotl(v1, 1) + Int32.rotl(v2, 7) + Int32.rotl(v3, 12) + Int32.rotl(v4, 18), rest}
   end
 end
-
-
-IO.puts(XXHash.xxh32("0123456789abcdefg__"))
