@@ -10,6 +10,7 @@ defmodule XXHash do
     def prime_5, do: 374761393
 
     def add(a, b), do: a + b |> mask
+    def sub(a, b), do: a - b |> mask
     def mul(a, b), do: a * b |> mask
     def lshift(a, b), do: a <<< b |> mask
     def rshift(a, b), do: a >>> b
@@ -30,6 +31,7 @@ defmodule XXHash do
     def prime_5, do: 2870177450012600261
 
     def add(a, b), do: a + b |> mask
+    def sub(a, b), do: a - b |> mask
     def mul(a, b), do: a * b |> mask
     def lshift(a, b), do: a <<< b |> mask
     def rshift(a, b), do: a >>> b
@@ -54,14 +56,14 @@ defmodule XXHash do
   @spec xxh32(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
   def xxh32(input, length, seed) do
     if length >= 16 do
-      h32 = 0 # Needs implementation, loop until 16 left.
+      {h32, buffer} = do_xxh32(0, seed, input)
     else
-      h32 = Int32.add(seed, Int32.prime_5)
+      {h32, buffer} = {Int32.add(seed, Int32.prime_5), input}
     end
 
     h32
     |> Int32.add(length)
-    |> do_xxh32(seed, input)
+    |> do_xxh32(seed, buffer)
     |> Int32.rshift_xor(15)
     |> Int32.mul(Int32.prime_2)
     |> Int32.rshift_xor(13)
@@ -70,27 +72,16 @@ defmodule XXHash do
   end
 
   @spec xxh32(non_neg_integer, non_neg_integer, binary | term) :: non_neg_integer
-  defp do_xxh32(h, _seed, <<>>), do: h
-
-  @spec xxh32(non_neg_integer, non_neg_integer, binary | term) :: non_neg_integer
-  defp do_xxh32(h, seed, <<a::32, b::32, c::32, d::32, rest::binary>> = all) do
+  defp do_xxh32(h, seed, <<_a::32, _b::32, _c::32, _d::32, _rest::binary>> = all) do
     v1 = Int32.add(seed, Int32.prime_1) |> Int32.add(Int32.prime_2)
     v2 = Int32.add(seed, Int32.prime_2)
     v3 = Int32.add(seed, 0)
-    v4 = Int32.add(seed, Int32.prime_1)
-
+    v4 = Int32.sub(seed, Int32.prime_1)
     do_xxh32(h, seed, all, {v1, v2, v3, v4})
   end
 
-  #@spec xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
-  defp do_xxh32(h, seed, <<a::32, b::32, c::32, d::32, rest::binary>>, {v1, v2, v3, v4}) do
-    0
-  end
-
-  #@spec xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
-  defp do_xxh32(h, seed, rest, {v1, v2, v3, v4}) do
-    0
-  end
+  @spec xxh32(non_neg_integer, non_neg_integer, binary | term) :: non_neg_integer
+  defp do_xxh32(h, _seed, <<>>), do: h
 
   @spec xxh32(non_neg_integer, non_neg_integer, binary | term) :: non_neg_integer
   defp do_xxh32(h, seed, <<p::32, rest::binary>>) do
@@ -110,7 +101,18 @@ defmodule XXHash do
     |> Int32.mul(Int32.prime_1)
     |> do_xxh32(seed, rest)
   end
+
+  @spec do_xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
+  defp do_xxh32(h, seed, <<a::32, b::32, c::32, d::32, rest::binary>>, {v1, v2, v3, v4}) do
+    cv = &(Int32.read(&1) |> Int32.mul(Int32.prime_2) |> Int32.add(&2) |> Int32.rotl(13) |> Int32.mul(Int32.prime_1))
+    do_xxh32(h, seed, rest, {cv.(<<a::32>>, v1), cv.(<<b::32>>, v2), cv.(<<c::32>>, v3), cv.(<<d::32>>, v4)})
+  end
+
+  @spec do_xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
+  defp do_xxh32(_h, _seed, rest, {v1, v2, v3, v4}) do
+    {Int32.rotl(v1, 1) + Int32.rotl(v2, 7) + Int32.rotl(v3, 12) + Int32.rotl(v4, 18), rest}
+  end
 end
 
 
-IO.puts(XXHash.xxh32("0123456789abcdef"))
+IO.puts(XXHash.xxh32("0123456789abcdefg__"))
