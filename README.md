@@ -7,7 +7,7 @@ This is a pure Elixir implementation of [xxHash](https://github.com/Cyan4973/xxH
 Add elixir_xxhash as a dependency in your mix.exs file.
 ```
 def deps do
-  [{:elixir_hash, "~> 0.1"}]
+  [{:elixir_xxhash, "~> 0.1"}]
 end
 ```
 Once this is done, execute mix deps.get to fetch and compile elixir_xxhash.
