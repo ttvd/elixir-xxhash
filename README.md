@@ -1,16 +1,16 @@
-elixir_xxhash
+elixir-xxhash
 ======
 
 This is a pure Elixir implementation of [xxHash](https://github.com/Cyan4973/xxHash)
 
 ## Usage
-Add elixir_xxhash as a dependency in your mix.exs file.
+Add dependency in your mix.exs file:
 ```
 def deps do
-  [{:elixir_xxhash, "~> 0.1"}]
+  [{:xxhash, "~> 0.1"}]
 end
 ```
-Once this is done, execute mix deps.get to fetch and compile elixir_xxhash.
+Once this is done, execute mix deps.get to fetch and compile elixir-xxhash.
 
 ## Running in iex
 Run with iex -S mix
