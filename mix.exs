@@ -3,8 +3,8 @@ defmodule XXHash.Mixfile do
 
   def project do
     [
-      app: :elixir_xxhash,
-      version: "0.1.0",
+      app: :xxhash,
+      version: "0.2.0",
       elixir: "~> 1.0",
       deps: deps
     ]
@@ -23,7 +23,7 @@ defmodule XXHash.Mixfile do
         files: ["lib", "mix.exs", "README.md"],
         contributors: ["Mykola Konyk"],
         licenses: ["MS-RL"],
-        links: %{"GitHub" => "https://github.com/ttvd/elixir_xxhash"}
+        links: %{"GitHub" => "https://github.com/ttvd/elixir-xxhash"}
       ]
   end
 end
