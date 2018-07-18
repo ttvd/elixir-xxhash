@@ -55,11 +55,12 @@ defmodule XXHash do
 
   @spec xxh32(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
   def xxh32(input, length, seed) do
-    if length >= 16 do
-      {h32, buffer} = do_xxh32(0, seed, input)
-    else
-      {h32, buffer} = {Int32.add(seed, Int32.prime_5), input}
-    end
+    {h32, buffer} =
+      if length >= 16 do
+        do_xxh32(0, seed, input)
+      else
+        {Int32.add(seed, Int32.prime_5), input}
+      end
 
     h32
     |> Int32.add(length)
