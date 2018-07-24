@@ -6,9 +6,9 @@ defmodule XXHash.Mixfile do
       app: :xxhash,
       version: "0.2.0",
       elixir: "~> 1.0",
-      description: description,
-      package: package,
-      deps: deps
+      description: description(),
+      package: package(),
+      deps: deps()
     ]
   end
 
