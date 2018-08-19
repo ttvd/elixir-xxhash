@@ -4,7 +4,7 @@ defmodule XXHash.Mixfile do
   def project do
     [
       app: :xxhash,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.0",
       description: description(),
       package: package(),
@@ -27,12 +27,12 @@ defmodule XXHash.Mixfile do
   end
 
   def package do
-      [
-        files: ["lib", "mix.exs", "README.md"],
-        contributors: ["Mykola Konyk"],
-        maintainers: ["Mykola Konyk"],
-        licenses: ["MS-RL"],
-        links: %{"GitHub" => "https://github.com/ttvd/elixir-xxhash"}
-      ]
+    [
+      files: ["lib", "mix.exs", "README.md"],
+      contributors: ["Mykola Konyk"],
+      maintainers: ["Mykola Konyk"],
+      licenses: ["MS-RL"],
+      links: %{"GitHub" => "https://github.com/ttvd/elixir-xxhash"}
+    ]
   end
 end
