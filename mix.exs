@@ -29,8 +29,8 @@ defmodule XXHash.Mixfile do
   def package do
     [
       files: ["lib", "mix.exs", "README.md"],
-      contributors: ["Mykola Konyk"],
-      maintainers: ["Mykola Konyk"],
+      contributors: ["Mykola Konyk", "Derek Kraan"],
+      maintainers: ["Mykola Konyk", "Derek Kraan"],
       licenses: ["MS-RL"],
       links: %{"GitHub" => "https://github.com/ttvd/elixir-xxhash"}
     ]
