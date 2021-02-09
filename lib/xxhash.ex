@@ -58,7 +58,7 @@ defmodule XXHash do
   def xxh32(input, seed), do: xxh32(input, String.length(input), seed)
 
   @spec xxh32(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
-  def xxh32(<<>>, _length, _seed), do: 0
+  def xxh32(<<>>, _length, _seed), do: 46_947_589
 
   @spec xxh32(binary | term, non_neg_integer, non_neg_integer) :: non_neg_integer
   def xxh32(input, length, seed) do
@@ -112,23 +112,26 @@ defmodule XXHash do
 
   @spec do_xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
   defp do_xxh32(h, seed, <<a::32, b::32, c::32, d::32, rest::binary>>, {v1, v2, v3, v4}) do
-    cv =
-      &(Int32.read(&1)
-        |> Int32.mul(Int32.prime_2())
-        |> Int32.add(&2)
-        |> Int32.rotl(13)
-        |> Int32.mul(Int32.prime_1()))
-
     do_xxh32(
       h,
       seed,
       rest,
-      {cv.(<<a::32>>, v1), cv.(<<b::32>>, v2), cv.(<<c::32>>, v3), cv.(<<d::32>>, v4)}
+      {round32(v1, <<a::32>>), round32(v2, <<b::32>>), round32(v3, <<c::32>>),
+       round32(v4, <<d::32>>)}
     )
   end
 
   @spec do_xxh32(non_neg_integer, non_neg_integer, binary | term, tuple) :: non_neg_integer
   defp do_xxh32(_h, _seed, rest, {v1, v2, v3, v4}) do
     {Int32.rotl(v1, 1) + Int32.rotl(v2, 7) + Int32.rotl(v3, 12) + Int32.rotl(v4, 18), rest}
+  end
+
+  defp round32(acc_n, lane_n) do
+    lane_n
+    |> Int32.read()
+    |> Int32.mul(Int32.prime_2())
+    |> Int32.add(acc_n)
+    |> Int32.rotl(13)
+    |> Int32.mul(Int32.prime_1())
   end
 end
