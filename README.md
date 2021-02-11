@@ -7,7 +7,7 @@ This is a pure Elixir implementation of [xxHash](https://github.com/Cyan4973/xxH
 Add dependency in your mix.exs file:
 ```
 def deps do
-  [{:xxhash, "~> 0.3.0"}]
+  [{:xxhash, "~> 0.3.1"}]
 end
 ```
 Once this is done, execute mix deps.get to fetch and compile elixir-xxhash.
@@ -35,7 +35,6 @@ iex(11)> XXHash.xxh32("0123456789abcdefg")
 
 ## Limitations
 * This is still work in progress.
-* Only 32 bit basic hashing is implemented (XXH32).
 
 ## Notes
 * You should consider creating a NIF of [xxHash](https://github.com/Cyan4973/xxHash) if you require a high performance version.
