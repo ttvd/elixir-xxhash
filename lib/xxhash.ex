@@ -18,7 +18,7 @@ defmodule XXHash do
     def mul(a, b), do: (a * b) |> mask
     def lshift(a, b), do: a <<< b |> mask
     def rshift(a, b), do: a >>> b
-    def xor(a, b), do: (a ^^^ b) |> mask
+    def xor(a, b), do: Bitwise.bxor(a, b) |> mask
     def rotl(a, b), do: lshift(a, b) ||| rshift(a, 32 - b)
     def rshift_xor(a, b), do: a |> xor(rshift(a, b))
     def read(<<a::32>>) when <<1::32-little>> != <<1::32-native>>, do: a
@@ -43,7 +43,7 @@ defmodule XXHash do
     def mul(a, b), do: (a * b) |> mask
     def lshift(a, b), do: a <<< b |> mask
     def rshift(a, b), do: a >>> b
-    def xor(a, b), do: (a ^^^ b) |> mask
+    def xor(a, b), do: Bitwise.bxor(a, b) |> mask
     def rotl(a, b), do: lshift(a, b) ||| rshift(a, 64 - b)
     def rshift_xor(a, b), do: a |> xor(rshift(a, b))
     def read(<<a::64>>) when <<1::64-little>> != <<1::64-native>>, do: a
